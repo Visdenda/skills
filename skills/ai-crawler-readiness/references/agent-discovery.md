@@ -15,12 +15,13 @@
 
 ## Checks in order
 
-1. `visdenda_check_llms_txt` — missing file, soft 404, missing H1, broken links, shape.
-2. `visdenda_check_mcp_server` — server card, protected-resource and authorization-server
-   metadata, `auth.md` and the A2A card; one fix per failure.
-3. `visdenda_check_agent_readiness` — up to eight probes per call (chosen from the full check set), a 0–100 score and per-check detail.
-4. `visdenda_scan_page` — one page: meta, canonical, robots, sitemap, llms.txt, schema,
-   hreflang and redirects; returns a seven-day report link.
+1. `visdenda_audit_site` with `focus=agent` — up to eight probes in one call, a 0–100
+   score, and every failing or warning probe with a concrete fix.
+2. The same tool with `focus=mcp` — server card, protected-resource and
+   authorization-server metadata, `auth.md` and the A2A card.
+3. `focus=llms` — one document: missing file, soft 404, missing H1 and broken links.
+4. `focus=full` — meta, canonical, robots, sitemap, llms.txt, schema, hreflang and
+   redirects; returns all findings with fixes and a seven-day report link.
 
 ## Interpret, do not worship the score
 

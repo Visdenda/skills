@@ -3,14 +3,13 @@
 > Part of the ai-crawler-readiness skill. Back to https://visdenda.com/skills/ai-crawler-readiness/SKILL.md.
 > Read this when the task matches: Read sitemap and robots results as two axes — structure and policy — and know which tool answers which.
 
-## Three tools, three questions
+## Three questions, one entry
 
-- `visdenda_check_sitemap` — structure: XML validity, entry counts, the 50,000-URL
-  per-file limit and sitemap-index children. A normal page URL checks `/sitemap.xml` on
-  its origin; a URL ending in `.xml` or `.xml.gz` is used as given. One request, plus up
-  to ten for index children.
-- `visdenda_check_robots_txt` — syntax and the declared `Sitemap:` pointers. One request,
-  plus up to three pointer probes. It does not judge per-bot access.
+- `visdenda_audit_site` with `focus=sitemap` — structure: XML validity, entry counts, the
+  50,000-URL per-file limit and sitemap-index children. A normal page URL checks
+  `/sitemap.xml` on its origin; a URL ending in `.xml` or `.xml.gz` is used as given.
+- The same tool with `focus=robots` — syntax and the declared `Sitemap:` pointers. It
+  does not judge per-bot access.
 - `visdenda_check_crawler_access` — policy per bot: allow or blocked, the deciding rule
   and `crawl-delay`, from one fetch. With exactly one crawler, `probe: true` also fetches
   the page as that agent.

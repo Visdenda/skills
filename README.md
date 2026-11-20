@@ -14,7 +14,7 @@ Install page with the same two commands: [https://visdenda.com/skills](https://v
 | Skill | Version | References | License | Digest |
 | --- | --- | --- | --- | --- |
 | `visdenda-agent` | 2026-11-20.2 | 8 | CC-BY-4.0 | `sha256:949f17cf68af280710add657e9508954a8a2bfe090c36236ff17d3de6383b169` |
-| `ai-crawler-readiness` | 2026-11-20.4 | 4 | CC-BY-4.0 | `sha256:828d7b8d1e9a83550a6c1a81fcb286a3ea5b5e23e61e28ba5e30b2bd361e2998` |
+| `ai-crawler-readiness` | 2026-11-20.5 | 4 | CC-BY-4.0 | `sha256:72ad197af9e5cbe317813126e7c03a623e59f888133c840ba5df1f9316393bec` |
 
 ### `visdenda-agent`
 
@@ -31,7 +31,7 @@ No executable code ships in this repository.
 
 ### `ai-crawler-readiness`
 
-Check whether AI crawlers and agents can actually read a site: robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), sitemap.xml, llms.txt shape, MCP discovery documents, page signals, an agent-readiness score and a single-page scan. Use when the question is AI visibility, bot blocking, llms.txt, sitemap or agent access. No API key.
+Verify that AI crawlers and assistants can actually reach and read a site, audit one page against the current public checks, and prove what changed since the last scan: re-run a full audit of the same URL with compareTo for added, resolved and persisting findings plus the score delta. Checks cover robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), sitemap.xml, llms.txt, MCP discovery and agent readiness. Use when the question is AI visibility, bot blocking, llms.txt, sitemap, MCP discovery or agent access — or whether a fix actually worked. No API key.
 
 Read it: [`skills/ai-crawler-readiness/SKILL.md`](skills/ai-crawler-readiness/SKILL.md)
 

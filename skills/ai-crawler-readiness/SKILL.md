@@ -1,10 +1,10 @@
 ---
 name: ai-crawler-readiness
-description: "Check whether AI crawlers and agents can actually read a site: robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), sitemap.xml, llms.txt shape, MCP discovery documents, page signals, an agent-readiness score and a single-page scan. Use when the question is AI visibility, bot blocking, llms.txt, sitemap or agent access. No API key."
+description: "Verify that AI crawlers and assistants can actually reach and read a site, audit one page against the current public checks, and prove what changed since the last scan: re-run a full audit of the same URL with compareTo for added, resolved and persisting findings plus the score delta. Checks cover robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), sitemap.xml, llms.txt, MCP discovery and agent readiness. Use when the question is AI visibility, bot blocking, llms.txt, sitemap, MCP discovery or agent access — or whether a fix actually worked. No API key."
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP; no credentials.
 metadata:
-  version: "2026-11-20.4"
+  version: "2026-11-20.5"
 ---
 
 # ai-crawler-readiness
@@ -40,76 +40,85 @@ metadata:
   cap can answer 429 sooner; stop and report the retry time.
 - A 429 is a limit, not an error to retry; read `Retry-After`. Invalid arguments and inner
   quota denials do not use up the daily quota, so fix the call and retry once.
-- The server advertises prompts `audit-agent-access`, `check-crawler-access` and
-  `explain-radar-update`, plus the resource `visdenda://crawlers.json`.
+- The server advertises prompts `audit-agent-access` and `check-crawler-access`, plus the
+  resource `visdenda://crawlers.json`.
 - A 503 `MCP_DISABLED` on `tools/call` means the endpoint is switched off; report it and stop.
 
 ## Start here
 
-1. `visdenda_get_radar_updates` — is a Search update in flight? It changes what a sudden
-   drop means, and it costs no external fetch; it returns public rules only (count and
-   highlight). `visdenda_get_radar_update` opens one update with its public checks and
-   verdicts.
+1. `visdenda_audit_site` — the single audit entry. `focus=agent` (or `focus=mcp` for the
+   MCP/OAuth surface) returns a 0–100 score and every failing or warning probe with a
+   concrete fix; `focus=signals` covers canonical, noindex, meta, hreflang and structured
+   data; `focus=robots`, `focus=sitemap` and `focus=llms` check one document each; the
+   default `focus=full` runs the complete one-page scan and returns all findings, fixes,
+   a seven-day report link and the `scanId` used by `compareTo` (it consumes one of the
+   three daily scans).
 2. `visdenda_check_crawler_access` — robots.txt per crawler, the deciding rule and
    crawl-delay, from one fetch. With exactly one crawler, `probe: true` also fetches the
-   page as that agent to catch a CDN/WAF block.
-3. `visdenda_check_robots_txt` — robots.txt syntax and the `Sitemap:` pointers, without
-   judging per-bot access.
-4. `visdenda_check_sitemap` — sitemap.xml structure, entry count and index children.
-5. `visdenda_check_llms_txt` — missing file, HTML soft 404, missing H1, broken links,
-   llmstxt.org shape.
-6. `visdenda_check_agent_readiness` — up to eight probes per call (chosen from the full check set), a 0–100 score and per-check detail.
-7. `visdenda_check_page_signals` — one page's canonical, meta robots/noindex, hreflang and
-   structured data.
-8. `visdenda_scan_page` — one page: meta, canonical, robots, sitemap, llms.txt, schema,
-   hreflang and redirects; returns a seven-day report link. Pass `updateId` to filter the
-   findings to one radar update; findings use public topic-mapped rules and include an
-   update summary.
+   page as that agent to catch a CDN/WAF block. Pass `paths` for extra same-origin URLs
+   and `probeUserAgent` to test a specific (including forged) user-agent.
+3. `visdenda_search_ai_crawlers` and `visdenda_get_ai_crawler` — the directory record:
+   current tokens, user agents, reverse-DNS suffixes, published IP ranges and review date.
+4. `visdenda_match_user_agent` and `visdenda_verify_crawler_ip` — turn a log line or a
+   source IP into evidence instead of trusting a self-declared user-agent.
+5. `visdenda_connect_account` — only when the user wants monitoring, history or Search
+   Console data; the free tools are one-shot.
+
+## Verify a fix
+
+A full audit is the only mode with a baseline. It returns a `scanId`; the report link lasts
+seven days, while the comparison baseline is kept for 90 days.
+
+1. Run `visdenda_audit_site` with `focus=full` on the exact URL and keep the `scanId`.
+2. Let the user make the change.
+3. Run the same call again on the same URL with `compareTo: "<scanId>"`. The field applies
+   to `focus=full` only; focused modes return no comparison.
+4. Report `compare.added`, `compare.resolved` and `compare.persisting` — each item has a
+   `check`, a `status` and a `summary` — plus `compare.scoreDelta`, `compare.previousScore`
+   and `compare.unchanged`. If `compare.truncated` is true, say the lists were capped.
+
+A `warn` counts as an open finding, so it moves between the three lists the same way a
+failure does. A check that disappeared counts as resolved only when its previous status
+was `warn` or `fail`. Two full audits spend two of the three daily scans; an unknown,
+expired or different-URL `compareTo` returns an error before the scan quota is charged.
+Read the three lists, not only the score: a fix can resolve a real defect and still add a
+warning. A focused check (for example `visdenda_check_crawler_access` for a robots change)
+reports the current state but never a delta.
 
 ## Example
 
-"Can ChatGPT read our pricing page?"
+"We changed robots.txt — did it work?"
 
-1. `visdenda_check_crawler_access` with `crawlers: ["GPTBot"]` and `probe: true` → the
-   robots verdict plus the page response seen as that agent.
-2. If blocked, name the deciding rule and the path; check `visdenda_get_ai_crawler` for the
-   current token and ranges before advising a change.
-3. Report bot + rule + path + status, then re-run the same call after the fix.
-
-## Bot access loop
-
-- `visdenda_match_user_agent` — paste a user-agent or a log line; exact, prefix and
-  substring matches tell you which crawler actually hit the site.
-- `visdenda_verify_crawler_ip` — paste a source IP; matches a crawler's official CIDRs and
-  reverse DNS, so a self-declared user agent is not the only evidence.
-- `visdenda_search_ai_crawlers` — search the directory by name, vendor, category or
-  robots.txt token; `visdenda_get_ai_crawler` returns user agents, reverse-DNS suffixes,
-  published IP ranges, sources and the review date.
-- Separate search crawlers from training and user-triggered fetchers before advising a
-  block: blocking a training bot does not remove the site from search answers, and
-  blocking a search bot can.
+1. Re-run `visdenda_audit_site` with `focus=full` on the same URL and
+   `compareTo: "<scanId from before the change>"`.
+2. Report the robots finding under `compare.resolved`, anything still under
+   `compare.persisting`, and `compare.scoreDelta`.
+3. If robots still fails, `visdenda_check_crawler_access` with the crawler name and
+   `probe: true` shows the deciding rule and the page as that bot sees it — one network
+   check instead of another daily scan.
 
 ## Discovery loop
 
-- `visdenda_check_mcp_server` — MCP server card, OAuth discovery documents, `auth.md`
-  and the A2A agent card, with a fix per failure.
+- Run `visdenda_audit_site` with `focus=mcp` for the server card, OAuth discovery
+  documents, `auth.md` and the A2A agent card; every failing finding carries its fix.
 - A missing optional document is a decision, not automatically a defect. Say what the
   absence costs before calling it a finding.
 
 ## Hand-off
 
-- Before quoting a rule, call `visdenda_explain_rule` for its public title/summary and the
-  fix tool.
 - Report what is blocked (bot + rule + evidence), what is missing (document + why it
-  matters), the readiness score with its failing checks, and the one fix with the highest
-  expected effect. Then re-run the same check.
+  matters), the readiness score with its failing findings, and the one fix with the
+  highest expected effect. Then re-run the same audit with `compareTo` so the result is a
+  delta, not a fresh impression.
+- When findings remain, the result's `nextActions` points at
+  `visdenda_connect_account`; use it only if the user wants monitoring or GSC data.
 
 ## References
 
 - [Bot access: robots, user agents and log evidence](https://visdenda.com/skills/ai-crawler-readiness/references/bot-access.md) — What robots.txt decides per bot, why a 403 is not a block, and how to prove a hit.
 - [Agent discovery: llms.txt, MCP cards and readiness](https://visdenda.com/skills/ai-crawler-readiness/references/agent-discovery.md) — What each discovery document proves, what it does not, and how to read a score.
 - [Sitemap and robots.txt: what each verdict actually proves](https://visdenda.com/skills/ai-crawler-readiness/references/sitemap-and-robots.md) — Read sitemap and robots results as two axes — structure and policy — and know which tool answers which.
-- [Page signals, radar updates and public rules](https://visdenda.com/skills/ai-crawler-readiness/references/page-signals-and-radar.md) — Choose between page signals and a full scan, attach a Search update, and read findings against the rule that produced them.
+- [Page signals and changes over time](https://visdenda.com/skills/ai-crawler-readiness/references/page-signals-and-changes.md) — Choose between focused signals and a full scan, then prove whether a fix actually changed the verdict.
 
 ## Upgrade path
 
