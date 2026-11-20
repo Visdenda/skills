@@ -2,8 +2,9 @@
 name: visdenda-agent
 description: "Analyze a site's SEO with Search Console and crawl evidence: declining pages, low-CTR queries, cannibalization, indexing gaps, technical findings and AI-crawler blind spots, then fix and re-verify. Use when the user asks why organic traffic changed, what to fix first, why a page is not indexed, or whether AI assistants can read the site. Requires a scoped Visdenda API key."
 license: CC-BY-4.0
+compatibility: Requires an MCP client with Streamable HTTP and a Bearer token.
 metadata:
-  version: "2026-11-20.1"
+  version: "2026-11-20.2"
 ---
 
 # visdenda-agent
@@ -42,6 +43,17 @@ competitor gap. Use this skill when the answer must be tied to evidence rather t
 3. Pick one insight; drill with the tool in `suggestedAction.tool` or the matching reference.
 4. Fix only after explaining the evidence; then verify with the tool named in `verifyWith`.
 5. Report: observation → inference → recommendation → impact → verification → not evaluated.
+
+## Example
+
+"What should I fix first on example.com?"
+
+1. `get_site_insights` → take one `declining_page` insight and read its `evidence`,
+   window and `impact` before touching anything else.
+2. `get_page_report` for that page → the search, audit, index and AI-fetch facts behind it.
+3. `get_radar_updates` → say whether a Search update is in flight before naming a cause.
+4. Report observation → inference → recommendation → verification. One question, one primary
+   insight; do not stack a second insight until the first is answered.
 
 ## Page-level loop
 

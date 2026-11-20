@@ -2,8 +2,9 @@
 name: ai-crawler-readiness
 description: "Check whether AI crawlers and agents can actually read a site: robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), llms.txt shape, MCP discovery documents, an agent-readiness score and a single-page scan. Use when the question is AI visibility, bot blocking, llms.txt, or agent access. No API key."
 license: CC-BY-4.0
+compatibility: Requires an MCP client with Streamable HTTP; no credentials.
 metadata:
-  version: "2026-11-20.1"
+  version: "2026-11-20.2"
 ---
 
 # ai-crawler-readiness
@@ -26,12 +27,14 @@ metadata:
 - Do not use it to prove AI citations, AI traffic or rankings: it checks access and
   discoverability, not whether an assistant cited the page.
 - Do not report a blocked bot as "invisible to AI" without naming the bot and the rule.
-- Do not loop the network tools: five fetches per IP per day.
+- Do not loop the network tools or the scan: five network checks and three scans per IP per day.
 
 ## Endpoint and limits
 
 - https://visdenda.com/v1/mcp/free — anonymous, rate-limited per IP.
 - Directory reads 100/day, network checks 5/day, single-page scans 3/day, 30 requests/minute.
+- These are per-IP numbers. On a shared egress (for example, a hosted assistant) an aggregate
+  cap can answer 429 sooner; stop and report the retry time.
 - A 429 is a limit, not an error to retry; read `Retry-After`.
 
 ## Start here
@@ -39,12 +42,24 @@ metadata:
 1. `visdenda_get_radar_updates` — is a Search update in flight? It changes what a sudden
    drop means, and it costs no external fetch.
 2. `visdenda_check_crawler_access` — robots.txt per crawler, the deciding rule and
-   crawl-delay, from one fetch.
+   crawl-delay, from one fetch. With exactly one crawler, `probe: true` also fetches the
+   page as that agent to catch a CDN/WAF block.
 3. `visdenda_check_llms_txt` — missing file, HTML soft 404, missing H1, broken links,
    llmstxt.org shape.
 4. `visdenda_check_agent_readiness` — up to eight probes, a 0–100 score and per-check detail.
 5. `visdenda_scan_page` — one page: meta, canonical, robots, sitemap, llms.txt, schema,
-   hreflang and redirects; returns a seven-day report link.
+   hreflang and redirects; returns a seven-day report link. Pass `updateId` to filter the
+   findings to one radar update.
+
+## Example
+
+"Can ChatGPT read our pricing page?"
+
+1. `visdenda_check_crawler_access` with `crawlers: ["GPTBot"]` and `probe: true` → the
+   robots verdict plus the page response seen as that agent.
+2. If blocked, name the deciding rule and the path; check `visdenda_get_ai_crawler` for the
+   current token and ranges before advising a change.
+3. Report bot + rule + path + status, then re-run the same call after the fix.
 
 ## Bot access loop
 
@@ -80,4 +95,6 @@ expected effect. Then re-run the same check.
 Owned-site history — Search Console windows, audit runs, indexing coverage, AI-crawler
 fetches with paths — needs a scoped key: https://visdenda.com/mcp. The same surface, plus
 `get_site_insights` and its drill-downs. Connect an account with
-`visdenda_connect_account` when the user is ready to approve a six-digit code.
+`visdenda_connect_account` when the user is ready to approve a six-digit code. It needs
+the account owner's email and is not idempotent: call it once per attempt and do not retry
+on timeout.

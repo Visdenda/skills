@@ -7,9 +7,9 @@
 
 Use the ranking the server already produced:
 
-- `get_site_insights` sorts by severity, then impact type and at-stake amount.
+- `get_site_insights` sorts by severity, then impact metric and at-stake amount.
 - `diagnose_site` ranks failing rules by page count and linked P0/P1 update.
-- `get_opportunities` ranks audit failures by page clicks and conversions for the archived month.
+- `get_opportunities` ranks audit failures by archived-month clicks and conversions.
 
 If you re-rank, state the formula and the inputs. Do not invent weights or a "SEO score".
 Do not silently drop a high-severity item because it is inconvenient; explain the trade-off.
