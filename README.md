@@ -7,6 +7,8 @@ Installable folders, one job each.
 > changes are overwritten on the next sync. Source of truth for the versions and
 > digests below: [https://visdenda.com/skills.json](https://visdenda.com/skills.json).
 
+Install page with the same two commands: [https://visdenda.com/skills](https://visdenda.com/skills).
+
 ## Skills
 
 | Skill | Version | References | License | Digest |
