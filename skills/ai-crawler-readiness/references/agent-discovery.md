@@ -18,7 +18,7 @@
 1. `visdenda_check_llms_txt` — missing file, soft 404, missing H1, broken links, shape.
 2. `visdenda_check_mcp_server` — server card, protected-resource and authorization-server
    metadata, `auth.md` and the A2A card; one fix per failure.
-3. `visdenda_check_agent_readiness` — up to eight probes, a 0–100 score and per-check detail.
+3. `visdenda_check_agent_readiness` — up to eight probes per call (chosen from the full check set), a 0–100 score and per-check detail.
 4. `visdenda_scan_page` — one page: meta, canonical, robots, sitemap, llms.txt, schema,
    hreflang and redirects; returns a seven-day report link.
 

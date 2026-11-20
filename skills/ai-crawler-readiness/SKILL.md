@@ -1,10 +1,10 @@
 ---
 name: ai-crawler-readiness
-description: "Check whether AI crawlers and agents can actually read a site: robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), llms.txt shape, MCP discovery documents, an agent-readiness score and a single-page scan. Use when the question is AI visibility, bot blocking, llms.txt, or agent access. No API key."
+description: "Check whether AI crawlers and agents can actually read a site: robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), sitemap.xml, llms.txt shape, MCP discovery documents, page signals, an agent-readiness score and a single-page scan. Use when the question is AI visibility, bot blocking, llms.txt, sitemap or agent access. No API key."
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP; no credentials.
 metadata:
-  version: "2026-11-20.2"
+  version: "2026-11-20.4"
 ---
 
 # ai-crawler-readiness
@@ -19,6 +19,7 @@ metadata:
 - "Can ChatGPT / Claude / Perplexity read this site?"
 - "Why is GPTBot blocked, and what does robots.txt say per bot?"
 - "Do we have llms.txt, and is it shaped right?"
+- "Is our sitemap or robots.txt valid?"
 - "Is our MCP server / agent card / auth.md discoverable?"
 - "Score how agent-ready this site is" or "scan this one page".
 
@@ -27,29 +28,43 @@ metadata:
 - Do not use it to prove AI citations, AI traffic or rankings: it checks access and
   discoverability, not whether an assistant cited the page.
 - Do not report a blocked bot as "invisible to AI" without naming the bot and the rule.
-- Do not loop the network tools or the scan: five network checks and three scans per IP per day.
+- Do not loop the network tools or the scan: five network checks, three scans and five
+  account hand-offs per IP per day.
 
 ## Endpoint and limits
 
 - https://visdenda.com/v1/mcp/free — anonymous, rate-limited per IP.
-- Directory reads 100/day, network checks 5/day, single-page scans 3/day, 30 requests/minute.
+- Directory reads 100/day, network checks 5/day, single-page scans 3/day, account hand-offs
+  5/day, 30 requests/minute.
 - These are per-IP numbers. On a shared egress (for example, a hosted assistant) an aggregate
   cap can answer 429 sooner; stop and report the retry time.
-- A 429 is a limit, not an error to retry; read `Retry-After`.
+- A 429 is a limit, not an error to retry; read `Retry-After`. Invalid arguments and inner
+  quota denials do not use up the daily quota, so fix the call and retry once.
+- The server advertises prompts `audit-agent-access`, `check-crawler-access` and
+  `explain-radar-update`, plus the resource `visdenda://crawlers.json`.
+- A 503 `MCP_DISABLED` on `tools/call` means the endpoint is switched off; report it and stop.
 
 ## Start here
 
 1. `visdenda_get_radar_updates` — is a Search update in flight? It changes what a sudden
-   drop means, and it costs no external fetch.
+   drop means, and it costs no external fetch; it returns public rules only (count and
+   highlight). `visdenda_get_radar_update` opens one update with its public checks and
+   verdicts.
 2. `visdenda_check_crawler_access` — robots.txt per crawler, the deciding rule and
    crawl-delay, from one fetch. With exactly one crawler, `probe: true` also fetches the
    page as that agent to catch a CDN/WAF block.
-3. `visdenda_check_llms_txt` — missing file, HTML soft 404, missing H1, broken links,
+3. `visdenda_check_robots_txt` — robots.txt syntax and the `Sitemap:` pointers, without
+   judging per-bot access.
+4. `visdenda_check_sitemap` — sitemap.xml structure, entry count and index children.
+5. `visdenda_check_llms_txt` — missing file, HTML soft 404, missing H1, broken links,
    llmstxt.org shape.
-4. `visdenda_check_agent_readiness` — up to eight probes, a 0–100 score and per-check detail.
-5. `visdenda_scan_page` — one page: meta, canonical, robots, sitemap, llms.txt, schema,
+6. `visdenda_check_agent_readiness` — up to eight probes per call (chosen from the full check set), a 0–100 score and per-check detail.
+7. `visdenda_check_page_signals` — one page's canonical, meta robots/noindex, hreflang and
+   structured data.
+8. `visdenda_scan_page` — one page: meta, canonical, robots, sitemap, llms.txt, schema,
    hreflang and redirects; returns a seven-day report link. Pass `updateId` to filter the
-   findings to one radar update.
+   findings to one radar update; findings use public topic-mapped rules and include an
+   update summary.
 
 ## Example
 
@@ -65,6 +80,8 @@ metadata:
 
 - `visdenda_match_user_agent` — paste a user-agent or a log line; exact, prefix and
   substring matches tell you which crawler actually hit the site.
+- `visdenda_verify_crawler_ip` — paste a source IP; matches a crawler's official CIDRs and
+  reverse DNS, so a self-declared user agent is not the only evidence.
 - `visdenda_search_ai_crawlers` — search the directory by name, vendor, category or
   robots.txt token; `visdenda_get_ai_crawler` returns user agents, reverse-DNS suffixes,
   published IP ranges, sources and the review date.
@@ -81,14 +98,18 @@ metadata:
 
 ## Hand-off
 
-Report what is blocked (bot + rule + evidence), what is missing (document + why it
-matters), the readiness score with its failing checks, and the one fix with the highest
-expected effect. Then re-run the same check.
+- Before quoting a rule, call `visdenda_explain_rule` for its public title/summary and the
+  fix tool.
+- Report what is blocked (bot + rule + evidence), what is missing (document + why it
+  matters), the readiness score with its failing checks, and the one fix with the highest
+  expected effect. Then re-run the same check.
 
 ## References
 
 - [Bot access: robots, user agents and log evidence](https://visdenda.com/skills/ai-crawler-readiness/references/bot-access.md) — What robots.txt decides per bot, why a 403 is not a block, and how to prove a hit.
 - [Agent discovery: llms.txt, MCP cards and readiness](https://visdenda.com/skills/ai-crawler-readiness/references/agent-discovery.md) — What each discovery document proves, what it does not, and how to read a score.
+- [Sitemap and robots.txt: what each verdict actually proves](https://visdenda.com/skills/ai-crawler-readiness/references/sitemap-and-robots.md) — Read sitemap and robots results as two axes — structure and policy — and know which tool answers which.
+- [Page signals, radar updates and public rules](https://visdenda.com/skills/ai-crawler-readiness/references/page-signals-and-radar.md) — Choose between page signals and a full scan, attach a Search update, and read findings against the rule that produced them.
 
 ## Upgrade path
 

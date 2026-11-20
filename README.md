@@ -14,7 +14,7 @@ Install page with the same two commands: [https://visdenda.com/skills](https://v
 | Skill | Version | References | License | Digest |
 | --- | --- | --- | --- | --- |
 | `visdenda-agent` | 2026-11-20.2 | 8 | CC-BY-4.0 | `sha256:949f17cf68af280710add657e9508954a8a2bfe090c36236ff17d3de6383b169` |
-| `ai-crawler-readiness` | 2026-11-20.2 | 2 | CC-BY-4.0 | `sha256:d71e0bc791248d4e460fc2a8a8626e7482951013c718b3f82320d31a3084e79c` |
+| `ai-crawler-readiness` | 2026-11-20.4 | 4 | CC-BY-4.0 | `sha256:828d7b8d1e9a83550a6c1a81fcb286a3ea5b5e23e61e28ba5e30b2bd361e2998` |
 
 ### `visdenda-agent`
 
@@ -31,7 +31,7 @@ No executable code ships in this repository.
 
 ### `ai-crawler-readiness`
 
-Check whether AI crawlers and agents can actually read a site: robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), llms.txt shape, MCP discovery documents, an agent-readiness score and a single-page scan. Use when the question is AI visibility, bot blocking, llms.txt, or agent access. No API key.
+Check whether AI crawlers and agents can actually read a site: robots.txt per bot (GPTBot, ClaudeBot, PerplexityBot), sitemap.xml, llms.txt shape, MCP discovery documents, page signals, an agent-readiness score and a single-page scan. Use when the question is AI visibility, bot blocking, llms.txt, sitemap or agent access. No API key.
 
 Read it: [`skills/ai-crawler-readiness/SKILL.md`](skills/ai-crawler-readiness/SKILL.md)
 
@@ -49,6 +49,12 @@ No executable code ships in this repository.
   [agent-watch](https://www.npmjs.com/package/@visdenda/agent-watch)).
 - The skills never contain credentials. `visdenda-agent` needs a scoped API key
   issued on the site; `ai-crawler-readiness` needs no key at all.
+
+## Claude plugin bundle
+
+The repository root also carries `.claude-plugin/plugin.json`, so the
+[Claude Directory](https://claude.ai/directory) can install both skills as one plugin.
+Folder install from `skills/<name>/` keeps working, and is all a non-Claude client needs.
 
 ## Versioning
 
