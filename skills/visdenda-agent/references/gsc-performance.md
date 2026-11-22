@@ -22,6 +22,26 @@ archived month instead of pretending the live window exists. Read the returned s
 These are rule outputs, not verdicts. Treat `severity` as a starting order and read
 `evidence` and `impact.method` before recommending anything.
 
+## One-call answers
+
+The server pre-computes four digests so you do not have to re-rank raw rows yourself:
+
+- `get_gsc_quick_wins` — striking-distance queries (position 4-20, above-median impressions)
+  with the page, CTR and potentialClicks measured against the site's own top-position CTR.
+- `get_gsc_cannibalization` — queries split across competing pages: the leader's impression
+  share and each page's position and clicks, ordered by clicks landing on non-leader pages.
+- `get_gsc_weekly_report` — last 7 days vs the previous 7 in one read: totals with deltas,
+  top-5 winning/losing pages, top-5 new/lost queries, top-3 quick wins and position movers.
+  The report is co-occurrence data; never narrate a cause from it.
+- `get_gsc_decay` — pages losing clicks across two equal windows (28/90d, vs previous or
+  last year), labeled `decayed-content` (position held — a refresh is the actionable first
+  step) or `ranking-drop` (position fell — a refresh will not fix it). Counts cover the
+  full evaluated set even though steady rows stay out of the list.
+
+All four are live GSC reads on paid plans and share the same daily live-read budget as
+`get_gsc_overview` / `get_gsc_queries` / `get_gsc_pages` — one call counts as one upstream
+read even when it fans out over several cached windows.
+
 ## Drill down
 
 - Page-level story → `get_page_report` for search, sessions, AI fetches, index verdict,
