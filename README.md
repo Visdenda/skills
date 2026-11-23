@@ -14,7 +14,7 @@ Install page with the same two commands: [https://visdenda.com/skills](https://v
 | Skill | Version | References | License | Digest |
 | --- | --- | --- | --- | --- |
 | `visdenda-agent` | 2026-11-22.2 | 8 | CC-BY-4.0 | `sha256:0273b1841cb8f877fa22279acfcdd49c972ffdff78e50ae215d23607049cef4e` |
-| `ai-crawler-readiness` | 2026-11-20.5 | 4 | CC-BY-4.0 | `sha256:72ad197af9e5cbe317813126e7c03a623e59f888133c840ba5df1f9316393bec` |
+| `ai-crawler-readiness` | 2026-11-23.1 | 4 | CC-BY-4.0 | `sha256:d201b9c32a97f7c5eacf8d93d38138f88c490abeeff85806012959e43574f534` |
 
 ### `visdenda-agent`
 

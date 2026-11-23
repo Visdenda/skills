@@ -6,4 +6,4 @@ skills whose bytes changed.
 | Skill | Version |
 | --- | --- |
 | `visdenda-agent` | 2026-11-22.2 |
-| `ai-crawler-readiness` | 2026-11-20.5 |
+| `ai-crawler-readiness` | 2026-11-23.1 |

@@ -4,7 +4,7 @@ description: "Verify that AI crawlers and assistants can actually reach and read
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP; no credentials.
 metadata:
-  version: "2026-11-20.5"
+  version: "2026-11-23.1"
 ---
 
 # ai-crawler-readiness
@@ -63,6 +63,13 @@ metadata:
    source IP into evidence instead of trusting a self-declared user-agent.
 5. `visdenda_connect_account` — only when the user wants monitoring, history or Search
    Console data; the free tools are one-shot.
+
+## Public knowledge
+
+`search` and `fetch` are the two unprefixed free tools: hosted assistants require those
+exact names. Use `search` for citation-backed research over the public knowledge library,
+then `fetch` with one result id. They read public material only; account data still needs
+`visdenda_connect_account`.
 
 ## Verify a fix
 
