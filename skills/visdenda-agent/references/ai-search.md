@@ -5,21 +5,21 @@
 
 ## Start from observed behavior
 
-`get_ai_traffic` reads probe data for the last 7, 28 or 30 days: hits by agent, previous-window
+`get_ai_visibility` with `view=traffic` reads probe data for the last 7, 28 or 30 days: hits by agent, previous-window
 delta, markdown negotiation, machine-file reads, AI referral hosts and robots violations.
 If the site has no probe data it returns `na` with a reason. That is not zero traffic and
 not proof that AI bots ignore the site.
 
-`get_crawler_gaps` adds the actionable layer: paths AI/search crawlers requested that 404/410,
+`get_site` with `view=crawler_gaps` adds the actionable layer: paths AI/search crawlers requested that 404/410,
 paths blocked by robots or 403, and whether robots.txt / llms.txt / sitemap.xml were fetched.
 
 ## AI Overviews
 
-`get_aio_visibility` returns the latest AI Overview check for tracked queries and, on paid
+`get_ai_visibility` with `view=aio` returns the latest AI Overview check for tracked queries and, on paid
 plans, sampled presence for a limited set of queries. An empty trend means "not sampled",
 not "absent". Do not generalize from one query sample to the whole site.
 
-`check_ai_visibility` is a research call and may cost money. Call `estimate_research_cost`
+`check_ai_visibility` is a research call and may cost money. Call `get_research` with `view=estimate`
 first, show the estimate, and only execute after the user confirms.
 
 ## What to report
@@ -34,7 +34,7 @@ tool returned that exact evidence. If the plan does not include live sampling, s
 
 ## Action and verification
 
-- Blocked path → unblock only when the user wants that agent; re-check with `get_crawler_gaps`.
+- Blocked path → unblock only when the user wants that agent; re-check with `get_site` (`view=crawler_gaps`).
 - Missing path → create/redirect, then verify with a fresh probe read.
 - llms.txt/robots gap → fix the file, then confirm crawler reads.
 - AIO measurement → repeat the sample after the agreed window; do not promise a citation.

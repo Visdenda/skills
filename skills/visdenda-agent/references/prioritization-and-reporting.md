@@ -8,8 +8,10 @@
 Use the ranking the server already produced:
 
 - `get_site_insights` sorts by severity, then impact metric and at-stake amount.
-- `diagnose_site` ranks failing rules by page count and linked P0/P1 update.
-- `get_opportunities` ranks audit failures by archived-month clicks and conversions.
+- `get_opportunities` ranks audit failures, GSC striking distance, decay, cannibalization and
+  competitor gaps with one score; archived-month clicks and conversions set the weight.
+- `get_site` with `view=health` is the score view: 0–100 with four explainable penalties (open
+  findings, backlog age, audit freshness, coverage). Use it to summarize, not to rank items.
 
 If you re-rank, state the formula and the inputs. Do not invent weights or a "SEO score".
 Do not silently drop a high-severity item because it is inconvenient; explain the trade-off.

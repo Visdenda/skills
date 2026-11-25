@@ -13,8 +13,8 @@ Install page with the same two commands: [https://visdenda.com/skills](https://v
 
 | Skill | Version | References | License | Digest |
 | --- | --- | --- | --- | --- |
-| `visdenda-agent` | 2026-11-22.2 | 8 | CC-BY-4.0 | `sha256:0273b1841cb8f877fa22279acfcdd49c972ffdff78e50ae215d23607049cef4e` |
-| `ai-crawler-readiness` | 2026-11-23.1 | 4 | CC-BY-4.0 | `sha256:d201b9c32a97f7c5eacf8d93d38138f88c490abeeff85806012959e43574f534` |
+| `visdenda-agent` | 2026-11-25.4 | 8 | CC-BY-4.0 | `sha256:2c299a552cdadc3f162a32a27a08556eace4188d95877c913dd87c7edb5579f0` |
+| `ai-crawler-readiness` | 2026-11-23.2 | 4 | CC-BY-4.0 | `sha256:01759b59c44f6080c18d3c6c7b5875f0199b1deaad2584b9381d64f933c88fdd` |
 
 ### `visdenda-agent`
 

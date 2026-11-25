@@ -9,9 +9,17 @@ Competitor sites live under a parent owned site. Use the competitor tools with t
 site id, not the parent id. If the key cannot see the competitor, say so; do not substitute a
 different domain.
 
-- `get_competitor_changes` — new, removed, lastmod-updated and content-changed pages in a window.
-- `get_competitor_feed` — page text and coverage for the changed pages.
-- `get_competitor_gaps` — terms/pages where the competitor is present and the owned site is not.
+- `get_competitor` with `view=brief` — begin with this: the deterministic 30-day brief across
+  every competitor under one owned site — new page counts, coverage, recurring themes, top gaps,
+  publishing pace.
+- `get_competitor` with `view=changes` or `view=feed` — the dated change list (new, removed,
+  lastmod, content-changed), then page text and coverage for those pages.
+- `get_competitor` with `view=gaps` — terms/pages where the competitor is present and the owned
+  site is not.
+- `get_competitor` with `view=rank` — latest keyword-compare positions for the owned site and
+  each competitor.
+- `get_competitor` with `view=discovery` — candidate competitors appearing in your tracked
+  keywords' top 10.
 
 ## From change to meaning
 
@@ -31,7 +39,7 @@ say that instead of manufacturing a task.
 ## SERP research is paid
 
 `get_serp_results`, `get_keyword_metrics`, `research_keywords` and `check_ai_visibility`
-call a paid provider. Call `estimate_research_cost` first, show the estimate, and wait for
+call a paid provider. Call `get_research` with `view=estimate` first, show the estimate, and wait for
 confirmation. Reuse cached results; do not run the same query twice.
 
 `get_serp_results` is a snapshot, not a rank tracker. Report the measured position and the

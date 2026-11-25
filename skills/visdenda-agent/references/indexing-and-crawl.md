@@ -19,9 +19,11 @@ For every URL keep these apart:
 
 - `get_site_insights` — counts and per-page rows for known gaps.
 - `get_page_report` — one URL across index verdict, findings, search and AI fetches.
-- `audit_url` — live canonical self-reference, favicon and BreadcrumbList check for a single URL.
-- `get_crawler_gaps` — paths AI/search crawlers requested that returned 404/410, plus paths
-  blocked by robots or 403, and whether robots.txt / llms.txt / sitemap.xml were fetched.
+- `check_url` with `view=diff` — live canonical self-reference, favicon and BreadcrumbList
+  check for a single URL.
+- `get_site` with `view=crawler_gaps` — paths AI/search crawlers requested that returned
+  404/410, plus paths blocked by robots or 403, and whether robots.txt / llms.txt / sitemap.xml
+  were fetched.
 
 ## Decide the action
 

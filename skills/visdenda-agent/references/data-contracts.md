@@ -6,7 +6,7 @@
 ## Source semantics
 
 - **GSC**: final data lags about 3 days. Live reads need a paid plan and the daily live-read
-  budget; otherwise use `get_gsc_monthly` for an archived month. Archived data is monthly,
+  budget; otherwise use `get_gsc` with `view=monthly` for an archived month. Archived data is monthly,
   not daily.
 - **Audit**: findings belong to a completed run. `pass`/`warn`/`fail`/`na` are different;
   `na` means the rule could not be evaluated on that page. `evidenceKey` points to stored evidence.
@@ -30,11 +30,12 @@
 ## Quotas and cost
 
 - Read tools are free but rate-limited; respect `429` and `Retry-After`.
-- `audit_url`, `get_site_fingerprint` and `get_site_i18n` perform network fetches and have a
-  daily network budget.
+- `check_url` (both views), `fetch_page` and `get_site_fingerprint` (both views) perform
+  network fetches and have a daily network budget.
 - GSC live reads have a separate daily budget. When it is exhausted, fall back to archived data
   or mark the type not evaluated.
-- Research tools that call a paid provider require `estimate_research_cost` first; report the
+- Research tools that call a paid provider require `get_research` with `view=estimate` first;
+  report the
   estimate and wait for confirmation. Cached results should be reused, not re-purchased.
 
 ## Writes

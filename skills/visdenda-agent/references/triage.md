@@ -17,7 +17,9 @@ If the request mixes questions, answer the highest-revenue one first and say wha
 
 ## Read the judgment layer
 
-1. `list_sites` or `get_portfolio` — confirm the site exists, is verified, and see attention order.
+1. `list_sites` — find the site, see attention order and resolve a domain to its `siteId`.
+   If the key owns no sites, `add_site` → `verify_site` (Google-bound sites skip manual
+   verification) → `run_audit` first.
 2. `get_site_insights` — the front door. It returns ranked, evidence-backed insights and,
    separately, the types it could not evaluate.
 3. Pick at most one primary insight type to pursue. For each insight keep:
@@ -28,11 +30,12 @@ If the request mixes questions, answer the highest-revenue one first and say wha
 
 ## Drill only where the insight points
 
-- Audit fail → `diagnose_site` or `get_audit_findings` → `explain_finding`.
-- GSC decline / CTR / cannibalization → `get_page_report` or `get_gsc_queries`.
-- Index gap → `get_page_report`; use `audit_url` for a live canonical/robots check.
-- Crawler gap → `get_crawler_gaps` for the path list and agents.
-- Portfolio-level → `get_project_status` for runs, changes, radar and GSC snapshot together.
+- Audit fail → `get_opportunities` (ranked) or `get_audit` with `view=findings`, then
+  `view=finding`.
+- GSC decline / CTR / cannibalization → `get_page_report` or `get_gsc` with `view=queries`.
+- Index gap → `get_page_report`; use `check_url` with `view=diff` for a live canonical/robots check.
+- Crawler gap → `get_site` with `view=crawler_gaps` for the path list and agents.
+- Portfolio-level → `get_site` with `view=status` for runs, changes, radar and GSC snapshot together.
 
 ## Stop conditions
 

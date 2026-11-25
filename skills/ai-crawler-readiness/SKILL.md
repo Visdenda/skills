@@ -4,7 +4,7 @@ description: "Verify that AI crawlers and assistants can actually reach and read
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP; no credentials.
 metadata:
-  version: "2026-11-23.1"
+  version: "2026-11-23.2"
 ---
 
 # ai-crawler-readiness
@@ -40,8 +40,12 @@ metadata:
   cap can answer 429 sooner; stop and report the retry time.
 - A 429 is a limit, not an error to retry; read `Retry-After`. Invalid arguments and inner
   quota denials do not use up the daily quota, so fix the call and retry once.
-- The server advertises prompts `audit-agent-access` and `check-crawler-access`, plus the
-  resource `visdenda://crawlers.json`.
+- The server advertises prompts `audit-agent-access`, `check-crawler-access` and
+  `ai-crawler-readiness`, plus the resources `visdenda://crawlers.json` and
+  `visdenda://skills/ai-crawler-readiness.md`.
+- If the client only surfaces tools, call `visdenda_get_agent_skill` once per session:
+  it returns this SKILL.md and its references, so the loop below is loaded before the
+  first check.
 - A 503 `MCP_DISABLED` on `tools/call` means the endpoint is switched off; report it and stop.
 
 ## Start here
