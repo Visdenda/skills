@@ -16,6 +16,24 @@ Use the ranking the server already produced:
 If you re-rank, state the formula and the inputs. Do not invent weights or a "SEO score".
 Do not silently drop a high-severity item because it is inconvenient; explain the trade-off.
 
+## Choose a batch
+
+- 3-5 pages per round, not the whole backlog. Bigger batches make every change unattributable.
+- Take revenue pages, then pages already near a ranking threshold; the page role and the
+  opportunity score are the evidence.
+- One primary change per page. If you cannot name the single change, the page is not ready.
+- Write the baseline before editing: window, clicks, impressions, average position, CTR and
+  sampled query coverage, plus the hypothesis, via `record_worklog_entry`.
+- Re-read the same window after 28 days.
+- Before recommending a CMS write, read `get_site` (`view=cms`): only `writableFields` can ship.
+  No connection (framework, headless, custom) means code or manual work, not `apply_fix`.
+
+## Success metrics
+
+Judge a round on clicks, impressions, sampled query coverage, average position and CTR, read
+from the same window before and after. These are observations, not a causal proof: ranking,
+seasonality and SERP features move together, so name the confounders you could not rule out.
+
 ## Report shape
 
 Use this order for every recommendation:

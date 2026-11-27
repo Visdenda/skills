@@ -1,10 +1,10 @@
 ---
 name: visdenda-agent
-description: "Analyze a site's SEO with Search Console and crawl evidence: declining pages, low-CTR queries, cannibalization, indexing gaps, technical findings and AI-crawler blind spots, then fix and re-verify. Use when the user asks why organic traffic changed, what to fix first, why a page is not indexed, or whether AI assistants can read the site. Requires a scoped Visdenda API key."
+description: "Analyze a site's SEO with Search Console and crawl evidence: declining pages, low-CTR queries, cannibalization, indexing gaps, technical findings, internal-link and topic-cluster gaps, CMS write capability, and AI-crawler blind spots, then fix and re-verify. Use when the user asks why organic traffic changed, what to fix first, why a page is not indexed, how pages should link to each other, what can actually be edited on the site, or whether AI assistants can read the site. Requires a scoped Visdenda API key."
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP and a Bearer token.
 metadata:
-  version: "2026-11-26.1"
+  version: "2026-11-27.2"
 ---
 
 # visdenda-agent
@@ -62,7 +62,7 @@ Choose the smallest surface that answers the question; do not walk the whole too
 
 ## Task routing
 
-Load the matching reference before the second call; do not load all eight.
+Load the matching reference before the second call; do not load all ten.
 
 | Task | Read this reference first | First call |
 | --- | --- | --- |
@@ -70,6 +70,8 @@ Load the matching reference before the second call; do not load all eight.
 | Traffic moved, or the user asks why | [Search performance and opportunity analysis](references/gsc-performance.md) | `get_gsc` (`view=weekly_report`) or `get_site_insights` |
 | What to fix first | [Prioritize, report and hand back](references/prioritization-and-reporting.md) | `get_opportunities` |
 | Audit details, findings, or a fix to verify | [Technical audit: from finding to verified fix](references/technical-audit.md) | `get_audit` (`view=findings`) |
+| Internal links or topic clusters | [Internal links and topic clusters](references/internal-links.md) | `get_links` (`view=page`) |
+| A fix must be applied through a CMS, or the user asks what can be edited | [Platform-aware fixes and CMS write paths](references/cms-platforms.md) | `get_site` (`view=cms`) |
 | A page is not indexed | [Indexing and crawler gaps](references/indexing-and-crawl.md) | `get_page_report` |
 | AI assistants, robots or llms.txt | [AI search: crawlers, referrals and AI Overviews](references/ai-search.md) | `get_ai_visibility` or `get_site` (`view=crawler_gaps`) |
 | Competitor gap or SERP question | [Competitors and SERP research](references/competitors-and-serp.md) | `get_competitor` |
@@ -136,6 +138,8 @@ same response also carries `queuePosition` and `queueEtaSeconds`. Poll `get_audi
 - [Triage a site before touching anything](https://visdenda.com/skills/visdenda-agent/references/triage.md) — Pick the one question that matters, read the judgment layer, then drill.
 - [Search performance and opportunity analysis](https://visdenda.com/skills/visdenda-agent/references/gsc-performance.md) — Windows, declines, CTR gaps and cannibalization without inventing causality.
 - [Technical audit: from finding to verified fix](https://visdenda.com/skills/visdenda-agent/references/technical-audit.md) — Explain the finding, fix the page, re-check the rule, then decide what else changes.
+- [Internal links and topic clusters](https://visdenda.com/skills/visdenda-agent/references/internal-links.md) — Read the crawl snapshot, fix reachability and anchors, then re-run the audit.
+- [Platform-aware fixes and CMS write paths](https://visdenda.com/skills/visdenda-agent/references/cms-platforms.md) — Read the write path before proposing; only ship fields the platform can write.
 - [Indexing and crawler gaps](https://visdenda.com/skills/visdenda-agent/references/indexing-and-crawl.md) — Unknown is not missing; a blocked or 404 path is a concrete task.
 - [AI search: crawlers, referrals and AI Overviews](https://visdenda.com/skills/visdenda-agent/references/ai-search.md) — Read what AI bots actually did; do not treat an empty sample as absence.
 - [Competitors and SERP research](https://visdenda.com/skills/visdenda-agent/references/competitors-and-serp.md) — Turn competitor changes into coverage gaps, not copycat pages; price research before buying.

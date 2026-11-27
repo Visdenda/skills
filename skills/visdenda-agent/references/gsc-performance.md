@@ -43,6 +43,62 @@ have to re-rank raw rows yourself:
 All `get_gsc` views share one daily live-read cap on paid plans; one call counts as one upstream read
 even when it fans out over several cached windows.
 
+## Opportunity buckets
+
+Four starting buckets, ordered by what usually pays first:
+
+| Bucket | Signal | Action | First tool |
+| --- | --- | --- | --- |
+| A | Position 4-20, impressions above the site median | Protect and strengthen the page: title/snippet work or a small content gap | `get_gsc` (`view=quick_wins`) |
+| B | Position 16-40 with real impressions | Deepen the content, add internal links, check intent match; do not estimate clicks from a CTR benchmark above position 20 | `get_gsc` (`view=queries`) + `get_page_report` |
+| C | Position 1-10, high impressions, low CTR | Check SERP features, AI Overview presence, intent and the snippet before rewriting | `get_page_report` / `get_ai_visibility` (`view=aio`) |
+| D | Queries newly appearing for a page | Decide whether to expand the existing page or build a new one | `get_gsc` (`view=query_coverage`) |
+
+Buckets are a starting order, not a verdict. A page can sit in two of them; pick the one whose
+action you can verify this round. When the server already ranks the opportunities, keep that
+order instead of re-bucketing.
+
+## Query rows are a sample
+
+GSC returns top rows, not every query. Page-level totals are authoritative: never sum the named
+query rows and call the result page impressions. Preserve the `truncated` and sample
+disclosures the response carries, and say the row list is partial when it is. If a view cannot
+be read at all, say which type was not evaluated instead of presenting a smaller list as the
+whole picture.
+
+## CTR is not a title verdict
+
+Before recommending a title or snippet change, check the position bucket, the query intent, the
+SERP features on that result and whether an AI Overview is present. Features and AI Overviews
+can absorb clicks, so a CTR gap against the site's own median is not proof that the title is
+bad. On positions 1-5 a low CTR is more often a result-page composition problem than a copy
+problem. For a tracked query, cross-read `get_ai_visibility` (`view=aio`, pass `query`) before
+calling it a copy problem; for a new query, `check_ai_visibility` is a paid sample and needs the
+same cost confirmation as any research call.
+
+## Batch and measurement discipline
+
+- At most 3-5 pages per round. A wide batch makes every result unattributable.
+- Before editing, record the baseline (window, clicks, impressions, average position, sampled
+  query coverage) and the single hypothesis with `record_worklog_entry`.
+- One primary change per page: title/snippet, content or links, not all three at once.
+- Do not re-edit the same page's title or meta description within 28 days; a second edit
+  destroys the comparison.
+- Re-read the same window after 28 days, and use control pages when the site has enough traffic
+  for them. "No conclusion yet" is a valid result.
+- No ranking guarantees. Report the observation and the uncertainty that remains.
+
+## New page or expand existing
+
+- Same SERP and same intent → strengthen the existing page. It is usually cheaper and faster,
+  and it avoids competing with yourself.
+- Distinct intent with its own SERP and its own demand → new page.
+
+Check `get_serp_results` for the query's current results and `get_competitor` (`view=gaps`)
+for pages competitors have that you do not. Read the existing page's query distribution first:
+a page already ranking for several close variants is a signal to expand, not to split. Never
+mass-produce variant pages for keyword permutations.
+
 ## Drill down
 
 - Page-level story → `get_page_report` for search, sessions, AI fetches, index verdict,

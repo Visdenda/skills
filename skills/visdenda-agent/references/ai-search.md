@@ -22,6 +22,14 @@ not "absent". Do not generalize from one query sample to the whole site.
 `check_ai_visibility` is a research call and may cost money. Call `get_research` with `view=estimate`
 first, show the estimate, and only execute after the user confirms.
 
+## CTR and AI Overviews
+
+When a query has impressions but a low CTR, read its AIO status before blaming the title:
+`get_ai_visibility` (`view=aio`, pass `query`) for tracked queries, or `check_ai_visibility`
+for a paid sample of a new query. An AIO that answers the query can absorb the click even when
+the page ranks well. Say the sample is limited; do not convert one AIO observation into a
+site-wide CTR explanation.
+
 ## What to report
 
 - Crawler access: which agents came, which paths were blocked or missing, and the evidence.

@@ -13,12 +13,12 @@ Install page with the same two commands: [https://visdenda.com/skills](https://v
 
 | Skill | Version | References | License | Digest |
 | --- | --- | --- | --- | --- |
-| `visdenda-agent` | 2026-11-26.1 | 8 | CC-BY-4.0 | `sha256:ec992f38a3c8c4dbce840ab4ca7f1c96a16f084fd983b429cc47c13aeb9ab949` |
+| `visdenda-agent` | 2026-11-27.2 | 10 | CC-BY-4.0 | `sha256:a86ac1f470fdbe3b16ea9b2d8e4e49fc1c8bdc4b02c04eeba71544ebcbaf01d8` |
 | `ai-crawler-readiness` | 2026-11-23.2 | 4 | CC-BY-4.0 | `sha256:01759b59c44f6080c18d3c6c7b5875f0199b1deaad2584b9381d64f933c88fdd` |
 
 ### `visdenda-agent`
 
-Analyze a site's SEO with Search Console and crawl evidence: declining pages, low-CTR queries, cannibalization, indexing gaps, technical findings and AI-crawler blind spots, then fix and re-verify. Use when the user asks why organic traffic changed, what to fix first, why a page is not indexed, or whether AI assistants can read the site. Requires a scoped Visdenda API key.
+Analyze a site's SEO with Search Console and crawl evidence: declining pages, low-CTR queries, cannibalization, indexing gaps, technical findings, internal-link and topic-cluster gaps, CMS write capability, and AI-crawler blind spots, then fix and re-verify. Use when the user asks why organic traffic changed, what to fix first, why a page is not indexed, how pages should link to each other, what can actually be edited on the site, or whether AI assistants can read the site. Requires a scoped Visdenda API key.
 
 Read it: [`skills/visdenda-agent/SKILL.md`](skills/visdenda-agent/SKILL.md)
 
