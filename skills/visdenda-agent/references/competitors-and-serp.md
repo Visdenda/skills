@@ -39,11 +39,13 @@ say that instead of manufacturing a task.
 ## SERP research is paid
 
 `get_serp_results`, `get_keyword_metrics`, `research_keywords` and `check_ai_visibility`
-call a paid provider. Call `get_research` with `view=estimate` first, show the estimate, and wait for
-confirmation. Reuse cached results; do not run the same query twice.
+call DataForSEO with the account's own DataForSEO key (billed by DataForSEO) or included platform
+credits, billed per request. Call `get_research` with `view=estimate` first, show the estimate, and
+wait for confirmation. Reuse cached results; do not run the same query twice.
 
-`get_serp_results` is a snapshot, not a rank tracker. Report the measured position and the
-snapshot date. "Not in top 10" is a measurement result, not a permanent ranking.
+Research sets priority only; it never verifies a fix. `get_serp_results` is a snapshot, not a rank
+tracker. Report the measured position and the snapshot date. "Not in top 10" is a measurement
+result, not a permanent ranking.
 
 ## Report
 

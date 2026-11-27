@@ -4,7 +4,7 @@ description: "Analyze a site's SEO with Search Console and crawl evidence: decli
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP and a Bearer token.
 metadata:
-  version: "2026-11-25.4"
+  version: "2026-11-26.1"
 ---
 
 # visdenda-agent
@@ -92,10 +92,14 @@ Load the matching reference before the second call; do not load all eight.
 
 1. `get_audit` with `view=findings` (or `view=finding`) → take the `findingStateId`.
 2. `check_url` with `view=diff` and `siteId` → read-only pre-check; diffs against the last run.
-3. `verify_fix` with that id → commits the rule recheck.
+3. `verify_fix` with that id → commits the rule recheck; a pass proves the change landed.
 4. `get_audit` with `view=compare` → when the change is broad or spans pages/templates.
-5. `record_worklog_entry` → append what changed and cite the run/finding/page evidence,
+5. Outcome → read the effect window: 28-day baseline vs 14 days from the change day +3 (after GSC
+   settles), with control pages when available.
+6. `record_worklog_entry` → append what changed and cite the run/finding/page evidence,
    so the next round can read it with `get_site` (`view=worklog`) instead of re-deriving it.
+
+A rule pass is not a traffic or ranking result; never present it as one.
 
 A null `findingStateId` means no open state, so there is nothing to verify; report the finding
 closed instead of re-running the check.
