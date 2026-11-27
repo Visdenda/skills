@@ -43,6 +43,11 @@ Then call `verify_fix` with the site and `findingStateId`, plus an idempotency k
 commits the rule recheck. A pass resolves the finding as fix-applied; anything else records
 the verdict and leaves it open.
 
+If you changed specific fields, pass `expect` with up to five `{ field, value }` entries
+(`title`, `meta_description`, `canonical`, `h1`, `meta_robots`). The console reads those fields
+from the same live fetch and returns `fieldChecks` plus `implementationVerified`; a mismatch
+does not keep the finding open, but report it instead of claiming the field is live.
+
 `verify_fix` is a rule recheck. It is not a traffic experiment. For traffic effects, use the
 28-day GSC window and say the result is not yet conclusive.
 

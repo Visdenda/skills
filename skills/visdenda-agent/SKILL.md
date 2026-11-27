@@ -92,7 +92,10 @@ Load the matching reference before the second call; do not load all eight.
 
 1. `get_audit` with `view=findings` (or `view=finding`) → take the `findingStateId`.
 2. `check_url` with `view=diff` and `siteId` → read-only pre-check; diffs against the last run.
-3. `verify_fix` with that id → commits the rule recheck; a pass proves the change landed.
+3. `verify_fix` with that id → commits the rule recheck; a pass proves the rule now passes. Add
+   `expect` (1–5 fields: `title`, `meta_description`, `canonical`, `h1`, `meta_robots`) to have
+   the console read those fields from the same live fetch; `implementationVerified` reports
+   whether every declared value matched. A field match is not a ranking result.
 4. `get_audit` with `view=compare` → when the change is broad or spans pages/templates.
 5. Outcome → read the effect window: 28-day baseline vs 14 days from the change day +3 (after GSC
    settles), with control pages when available.
