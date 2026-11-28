@@ -4,7 +4,7 @@ description: "Verify that AI crawlers and assistants can actually reach and read
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP; no credentials.
 metadata:
-  version: "2026-11-23.2"
+  version: "2026-11-28.1"
 ---
 
 # ai-crawler-readiness

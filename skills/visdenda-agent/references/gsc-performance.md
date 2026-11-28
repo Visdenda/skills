@@ -111,8 +111,8 @@ mass-produce variant pages for keyword permutations.
 
 - A CTR gap is relative to the site's own median, not a universal benchmark. Do not claim
   "the title is bad" from CTR alone; check position, query intent and the landing page.
-- A decline is not automatically an algorithm update. Check `get_radar_updates` /
-  `get_site` with `view=update_impact`, seasonality, tracking changes and page changes before naming a cause.
+- A decline is not automatically an algorithm update. Check `get_radar_updates`,
+  seasonality, tracking changes and page changes before naming a cause.
 - Cannibalization means pages compete for the same query, not that one must be deleted.
   Check revenue role (the tool flags it), internal links and canonical signals.
 - If GSC is not bound, free-plan live reads are unavailable, or the daily cap is reached,

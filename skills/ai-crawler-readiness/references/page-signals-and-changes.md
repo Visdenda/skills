@@ -9,9 +9,9 @@
   noindex, meta preview, hreflang and structured data. One request, no report, no scan
   quota: use it for repeated checks while fixing something.
 - The same tool with `focus=full` (the default) — 20+ checks in one pass, a grade, every
-  failing/warning finding with its fix, and a seven-day report link. Pass `updateId` to
-  attach one public radar update's checks. It consumes one of the three daily scans, so do
-  not re-scan after a one-line change; re-check the specific signal instead.
+  failing/warning finding with its fix, and a seven-day report link. It consumes one of the
+  three daily scans, so do not re-scan after a one-line change; re-check the specific signal
+  instead.
 
 ## Compare, do not remember
 
@@ -30,8 +30,6 @@
   one you observed and on which URL, not just "noindex: yes".
 - Hreflang tags alone do not prove a correct cluster; reciprocity and `x-default` matter.
 - JSON-LD presence is not rich-result eligibility. Report the type found, not a promise.
-- Findings filtered by `updateId` are a subset. No finding under a filter is not a clean
-  site.
 
 ## Report
 

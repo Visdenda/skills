@@ -4,7 +4,7 @@ description: "Analyze a site's SEO with Search Console and crawl evidence: decli
 license: CC-BY-4.0
 compatibility: Requires an MCP client with Streamable HTTP and a Bearer token.
 metadata:
-  version: "2026-11-27.2"
+  version: "2026-11-28.1"
 ---
 
 # visdenda-agent
